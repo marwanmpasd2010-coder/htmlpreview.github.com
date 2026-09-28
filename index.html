@@ -1,47 +1,722 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="ar" dir="rtl">
 <head>
-	<meta charset="utf-8">
-	<title>GitHub &amp; BitBucket HTML Preview</title>
-	<style>
-	body {
-		font: 12px 'Helvetica Neue', Helvetica, Arial, freesans, clean, sans-serif;
-		color: #333;
-	}
-	h1 {
-		font-size: 20px;
-	}
-	a {
-		color: #666;
-	}
-	#previewform {
-		display: none;
-		padding: 20px; 
-		text-align: center;
-	}
-	strong {
-		color: #333;
-		background-color: #FAFFA6;
-		padding: 0.1em;
-	}
-	#footer {
-		margin: 20px 0;
-		font-size: 10px;
-		color: #666;
-	}
-	</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="اختبار إلكتروني تفاعلي من 150 سؤالاً في أساسيات HTML - الدرس الأول">
+  <title>اختبار الدرس الأول | أساسيات HTML</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --surface: #ffffff;
+      --surface-2: #f8fafc;
+      --text: #16233b;
+      --muted: #66758d;
+      --line: #e5eaf2;
+      --primary: #5b5ce2;
+      --primary-dark: #4547c8;
+      --primary-soft: #eeefff;
+      --teal: #12a896;
+      --teal-soft: #e7faf7;
+      --warning: #d97706;
+      --success: #11845b;
+      --success-soft: #e6f8ef;
+      --danger: #d14343;
+      --danger-soft: #fff0f0;
+      --shadow: 0 18px 45px rgba(39, 55, 91, .09);
+      --shadow-sm: 0 6px 18px rgba(39, 55, 91, .07);
+      --radius-lg: 24px;
+      --radius-md: 16px;
+      --radius-sm: 10px;
+      color-scheme: light;
+    }
+
+    [data-theme="dark"] {
+      --bg: #101827;
+      --surface: #182337;
+      --surface-2: #202d43;
+      --text: #edf3ff;
+      --muted: #a8b7cf;
+      --line: #30415b;
+      --primary: #8b8df5;
+      --primary-dark: #a8a9ff;
+      --primary-soft: #282b58;
+      --teal: #37cbb5;
+      --teal-soft: #123d3b;
+      --warning: #f1aa50;
+      --success: #42d69c;
+      --success-soft: #153f37;
+      --danger: #ff8585;
+      --danger-soft: #482c35;
+      --shadow: 0 18px 45px rgba(0, 0, 0, .25);
+      --shadow-sm: 0 6px 18px rgba(0, 0, 0, .2);
+      color-scheme: dark;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Cairo", Tahoma, Arial, sans-serif;
+      line-height: 1.75;
+      transition: background .35s ease, color .35s ease;
+    }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    a { color: inherit; }
+
+    .page-shell { width: min(1160px, calc(100% - 32px)); margin: 0 auto; }
+    .hero {
+      position: relative;
+      overflow: hidden;
+      margin-top: 24px;
+      padding: 24px 30px 32px;
+      border-radius: var(--radius-lg);
+      color: #fff;
+      background: linear-gradient(135deg, #4547c8 0%, #6868e8 50%, #18a69a 125%);
+      box-shadow: 0 20px 45px rgba(70, 74, 196, .25);
+    }
+    .hero::before, .hero::after {
+      content: "";
+      position: absolute;
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .hero::before { width: 340px; height: 340px; left: -125px; bottom: -230px; }
+    .hero::after { width: 260px; height: 260px; right: -80px; top: -190px; }
+    .topbar, .hero-content, .student-panel { position: relative; z-index: 1; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 800; letter-spacing: .2px; }
+    .brand-mark {
+      width: 38px; height: 38px; display: grid; place-items: center;
+      border-radius: 12px; background: rgba(255,255,255,.18); backdrop-filter: blur(5px);
+    }
+    .brand-mark svg { width: 22px; height: 22px; }
+    .theme-toggle {
+      display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px;
+      color: #fff; background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.27);
+      border-radius: 999px; transition: background .2s ease, transform .2s ease;
+    }
+    .theme-toggle:hover { background: rgba(255,255,255,.25); transform: translateY(-1px); }
+    .theme-toggle svg { width: 18px; height: 18px; }
+    .hero-content { max-width: 760px; padding-top: 30px; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 8px; color: #dfe3ff; font-size: .86rem; font-weight: 700; }
+    .eyebrow-dot { width: 8px; height: 8px; border-radius: 50%; background: #62e0ca; box-shadow: 0 0 0 5px rgba(98,224,202,.16); }
+    h1 { margin: 9px 0 8px; font-size: clamp(1.75rem, 4vw, 2.7rem); line-height: 1.25; letter-spacing: -.5px; }
+    .hero-description { margin: 0; color: #e5e8ff; max-width: 700px; font-size: 1rem; }
+    .hero-badges { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 19px; }
+    .hero-badge { display: inline-flex; align-items: center; gap: 7px; padding: 6px 11px; color: #f5f6ff; background: rgba(255,255,255,.13); border: 1px solid rgba(255,255,255,.18); border-radius: 999px; font-size: .81rem; }
+    .hero-badge svg { width: 15px; height: 15px; }
+    .student-panel { display: grid; grid-template-columns: minmax(220px, 1.4fr) minmax(185px, .7fr); gap: 14px; margin-top: 28px; }
+    .field-label { display: block; margin: 0 0 6px; font-size: .82rem; font-weight: 700; color: #e6e8ff; }
+    .student-input, .student-date {
+      width: 100%; padding: 11px 14px; color: #fff; background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.3); border-radius: 11px; outline: none;
+      transition: border .2s ease, background .2s ease;
+    }
+    .student-input::placeholder { color: #d9dcf8; }
+    .student-input:focus, .student-date:focus { border-color: #fff; background: rgba(255,255,255,.2); }
+    .student-date { color-scheme: dark; }
+
+    .progress-card { margin: 22px 0 18px; padding: 19px 21px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-md); box-shadow: var(--shadow-sm); }
+    .progress-head { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 11px; }
+    .progress-title { display: flex; align-items: center; gap: 9px; font-weight: 800; }
+    .progress-title svg { width: 19px; height: 19px; color: var(--primary); }
+    .progress-stat { color: var(--muted); font-size: .88rem; font-weight: 700; }
+    .progress-track { height: 11px; overflow: hidden; background: var(--surface-2); border-radius: 999px; }
+    .progress-fill { width: 0%; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--primary), var(--teal)); transition: width .45s cubic-bezier(.2,.8,.2,1); }
+    .progress-foot { display: flex; justify-content: space-between; margin-top: 7px; color: var(--muted); font-size: .76rem; }
+
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 21px; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 9px 16px; border: 1px solid transparent; border-radius: 11px; font-weight: 700; transition: transform .2s ease, box-shadow .2s ease, background .2s ease; }
+    .btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+    .btn svg { width: 17px; height: 17px; }
+    .btn-primary { color: #fff; background: var(--primary); }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-secondary { color: var(--primary); background: var(--primary-soft); border-color: transparent; }
+    .btn-outline { color: var(--text); background: var(--surface); border-color: var(--line); }
+    .btn-danger { color: var(--danger); background: var(--danger-soft); }
+
+    .score-panel { display: none; position: relative; overflow: hidden; margin: 0 0 22px; padding: 20px 22px; background: linear-gradient(120deg, var(--primary-soft), var(--teal-soft)); border: 1px solid var(--line); border-radius: var(--radius-md); animation: slide-in .4s ease both; }
+    .score-panel.visible { display: block; }
+    .score-panel::after { content: "✦"; position: absolute; left: 28px; top: 8px; color: var(--primary); opacity: .15; font-size: 3rem; }
+    .score-grid { display: grid; grid-template-columns: auto 1fr; gap: 16px; align-items: center; }
+    .score-number { display: grid; place-items: center; width: 94px; height: 94px; border: 8px solid var(--primary); border-left-color: var(--teal); border-radius: 50%; font-size: 1.45rem; font-weight: 800; color: var(--primary); }
+    .score-panel h2 { margin: 0 0 4px; font-size: 1.18rem; }
+    .score-panel p { margin: 0; color: var(--muted); }
+    .score-details { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .score-chip { padding: 4px 10px; border-radius: 999px; background: var(--surface); color: var(--muted); font-size: .78rem; font-weight: 700; }
+
+    .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 15px; margin: 28px 0 13px; }
+    .section-heading h2 { margin: 0; font-size: 1.25rem; }
+    .section-heading p { margin: 0; color: var(--muted); font-size: .85rem; }
+    .quiz-list { display: grid; gap: 13px; }
+    .question-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-md); box-shadow: 0 3px 12px rgba(39, 55, 91, .035); transition: border-color .25s ease, box-shadow .25s ease, transform .25s ease; animation: card-in .45s ease both; }
+    .question-card:hover { border-color: color-mix(in srgb, var(--primary) 42%, var(--line)); box-shadow: var(--shadow-sm); }
+    .question-card.answered { border-color: color-mix(in srgb, var(--primary) 35%, var(--line)); }
+    .question-card.answer-pulse { animation: answer-pulse .45s ease; }
+    .question-top { display: flex; align-items: flex-start; gap: 13px; padding: 17px 18px 10px; }
+    .question-number { flex: 0 0 35px; display: grid; place-items: center; width: 35px; height: 35px; border-radius: 10px; color: var(--primary); background: var(--primary-soft); font-size: .82rem; font-weight: 800; }
+    .question-copy { flex: 1; min-width: 0; }
+    .question-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; margin-bottom: 3px; }
+    .question-type { display: inline-block; padding: 2px 8px; border-radius: 999px; color: var(--teal); background: var(--teal-soft); font-size: .68rem; font-weight: 800; }
+    .question-difficulty { color: var(--muted); font-size: .68rem; }
+    .question-text { margin: 0; font-size: .98rem; font-weight: 700; line-height: 1.75; }
+    .options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; padding: 5px 18px 18px; }
+    .option { position: relative; display: flex; align-items: center; gap: 9px; min-height: 46px; padding: 9px 12px; color: var(--text); background: var(--surface-2); border: 1px solid var(--line); border-radius: 10px; cursor: pointer; font-size: .86rem; transition: background .2s ease, border-color .2s ease, transform .2s ease; }
+    .option:hover { border-color: var(--primary); transform: translateY(-1px); }
+    .option input { position: absolute; opacity: 0; pointer-events: none; }
+    .option-marker { flex: 0 0 21px; display: grid; place-items: center; width: 21px; height: 21px; border: 2px solid var(--muted); border-radius: 50%; color: transparent; font-size: .65rem; font-weight: 800; transition: all .2s ease; }
+    .option input:checked + .option-marker { color: #fff; border-color: var(--primary); background: var(--primary); }
+    .option input:checked ~ .option-label { font-weight: 700; }
+    .option:has(input:checked) { border-color: var(--primary); background: var(--primary-soft); }
+    .option-label { flex: 1; }
+    .answer-feedback { display: none; margin: -5px 18px 16px; padding: 8px 11px; border-radius: 9px; font-size: .77rem; font-weight: 700; }
+    .answers-visible .answer-feedback { display: block; }
+    .answer-feedback.good { color: var(--success); background: var(--success-soft); }
+    .answer-feedback.bad { color: var(--danger); background: var(--danger-soft); }
+    .answer-feedback.neutral { color: var(--warning); background: color-mix(in srgb, var(--warning) 12%, transparent); }
+    .option.correct-answer { border-color: var(--success); background: var(--success-soft); }
+    .option.correct-answer .option-marker { border-color: var(--success); color: #fff; background: var(--success); }
+    .option.wrong-answer { border-color: var(--danger); background: var(--danger-soft); }
+    .option.wrong-answer .option-marker { border-color: var(--danger); color: #fff; background: var(--danger); }
+
+    .answer-key { margin: 34px 0 30px; padding: 21px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-md); }
+    .answer-key summary { cursor: pointer; color: var(--primary); font-weight: 800; }
+    .key-intro { margin: 7px 0 14px; color: var(--muted); font-size: .84rem; }
+    .key-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px 18px; padding-top: 8px; border-top: 1px solid var(--line); }
+    .key-item { padding: 5px 0; border-bottom: 1px dashed var(--line); font-size: .76rem; }
+    .key-item strong { color: var(--primary); }
+
+    .site-footer { position: relative; margin-top: 36px; padding: 30px 24px 24px; color: #eaf0ff; background: #17233a; border-radius: var(--radius-lg) var(--radius-lg) 0 0; text-align: center; }
+    [data-theme="dark"] .site-footer { background: #0b1220; }
+    .footer-name { margin: 0; font-size: 1.35rem; font-weight: 800; }
+    .footer-sub { margin: 3px 0 15px; color: #bfcbe2; font-size: .85rem; }
+    .footer-contact { display: flex; justify-content: center; flex-wrap: wrap; align-items: center; gap: 10px 18px; color: #dae4fa; font-size: .86rem; }
+    .footer-link { display: inline-flex; align-items: center; gap: 6px; text-decoration: none; }
+    .footer-link:hover { color: #66e2c6; }
+    .footer-link svg { width: 18px; height: 18px; }
+    .copyright { margin: 20px 0 0; padding-top: 13px; border-top: 1px solid rgba(255,255,255,.13); color: #aebbd2; font-size: .75rem; }
+    .floating-wa { position: fixed; z-index: 20; left: 20px; bottom: 20px; display: grid; place-items: center; width: 54px; height: 54px; color: #fff; background: #1fbd68; border-radius: 50%; box-shadow: 0 8px 22px rgba(31,189,104,.35); transition: transform .2s ease, box-shadow .2s ease; }
+    .floating-wa:hover { color: #fff; transform: translateY(-4px) scale(1.04); box-shadow: 0 12px 28px rgba(31,189,104,.45); }
+    .floating-wa svg { width: 28px; height: 28px; }
+    .save-note { margin: 8px 0 0; color: var(--muted); font-size: .74rem; text-align: center; }
+    .print-header { display: none; }
+
+    @keyframes card-in { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes answer-pulse { 0% { transform: scale(1); } 40% { transform: scale(1.008); } 100% { transform: scale(1); } }
+    @keyframes slide-in { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+
+    @media (max-width: 680px) {
+      .page-shell { width: min(100% - 18px, 1160px); }
+      .hero { margin-top: 9px; padding: 18px 17px 22px; border-radius: 19px; }
+      .theme-toggle { padding: 8px 10px; }
+      .theme-label { display: none; }
+      .student-panel { grid-template-columns: 1fr; gap: 10px; margin-top: 22px; }
+      .progress-card { padding: 15px; }
+      .options { grid-template-columns: 1fr; padding: 5px 12px 14px; }
+      .question-top { padding: 14px 12px 8px; gap: 10px; }
+      .answer-feedback { margin-right: 12px; margin-left: 12px; }
+      .question-number { flex-basis: 31px; width: 31px; height: 31px; }
+      .actions .btn { flex: 1 1 calc(50% - 10px); padding-right: 10px; padding-left: 10px; font-size: .8rem; }
+      .score-grid { grid-template-columns: 1fr; justify-items: center; text-align: center; }
+      .score-details { justify-content: center; }
+      .key-grid { grid-template-columns: repeat(2, 1fr); gap: 5px 12px; }
+      .site-footer { padding-right: 14px; padding-left: 14px; }
+      .floating-wa { left: 13px; bottom: 13px; width: 49px; height: 49px; }
+      .floating-wa svg { width: 25px; height: 25px; }
+    }
+
+    @media print {
+      @page { size: A4; margin: 13mm; }
+      :root, [data-theme="dark"] { --bg: #fff; --surface: #fff; --surface-2: #fff; --text: #111; --muted: #555; --line: #cfcfcf; --primary: #333; --primary-soft: #f4f4f4; --teal: #333; --teal-soft: #f4f4f4; }
+      body { background: #fff !important; color: #111 !important; font-size: 10pt; }
+      .page-shell { width: 100%; }
+      .hero { margin: 0 0 10px; padding: 14px 16px; border-radius: 0; color: #111; background: #fff; border: 2px solid #222; box-shadow: none; }
+      .hero::before, .hero::after, .topbar, .hero-badges, .actions, .progress-card, .save-note, .floating-wa, .answer-key summary, .score-panel, .eyebrow-dot { display: none !important; }
+      .hero-content { padding-top: 0; max-width: none; }
+      .hero h1 { margin: 0; font-size: 18pt; }
+      .hero-description { color: #333; font-size: 9pt; }
+      .student-panel { display: none; }
+      .print-header { display: block; margin: 10px 0 15px; padding: 10px 12px; border: 1px solid #777; }
+      .print-header h2 { margin: 0 0 6px; font-size: 12pt; }
+      .print-fields { display: flex; justify-content: space-between; gap: 12px; font-size: 9pt; }
+      .section-heading { margin: 10px 0 6px; }
+      .section-heading h2 { font-size: 12pt; }
+      .section-heading p { font-size: 8pt; }
+      .quiz-list { display: block; }
+      .question-card { margin: 0 0 8px; border: 1px solid #bbb; border-radius: 3px; box-shadow: none; break-inside: avoid; }
+      .question-card:hover { box-shadow: none; }
+      .question-top { padding: 7px 9px 3px; }
+      .question-number { width: 23px; height: 23px; flex-basis: 23px; border-radius: 3px; color: #111; background: #eee; font-size: 8pt; }
+      .question-meta { margin-bottom: 0; }
+      .question-type, .question-difficulty { font-size: 7pt; }
+      .question-text { font-size: 9pt; line-height: 1.45; }
+      .options { grid-template-columns: repeat(2, 1fr); gap: 3px 9px; padding: 2px 9px 7px; }
+      .option { min-height: 23px; padding: 3px 5px; border: 0; background: #fff; font-size: 8pt; }
+      .option-marker { width: 13px; height: 13px; flex-basis: 13px; border: 1px solid #777; font-size: 0; }
+      .option:has(input:checked) { border: 0; background: #fff; }
+      .answer-feedback { display: none !important; }
+      .answer-key { margin: 18px 0; padding: 10px; border: 1px solid #999; border-radius: 3px; break-before: page; }
+      .answer-key[open] { display: block; }
+      .answer-key:not([open]) { display: none; }
+      .key-intro { font-size: 8pt; }
+      .key-grid { grid-template-columns: repeat(4, 1fr); gap: 2px 9px; }
+      .key-item { font-size: 7pt; }
+      .site-footer { margin-top: 15px; padding: 14px; color: #111; background: #fff; border: 1px solid #777; border-radius: 0; }
+      .footer-sub, .footer-contact, .copyright { color: #222; }
+      .footer-sub { margin-bottom: 7px; }
+      .copyright { margin-top: 8px; padding-top: 7px; border-color: #bbb; }
+    }
+  </style>
 </head>
 <body>
-	<form id="previewform" onsubmit="location.href='/?'+this.file.value;return false">
-		<h1>GitHub &amp; BitBucket HTML Preview</h1>
-		<p>
-			Enter URL of the HTML file to preview:
-			<input type="url" id="file" value="" placeholder="e.g. https://github.com/user/repo/blob/master/index.html" size="60" autofocus>
-			<input type="submit" value="Preview">
-		</p>
-		<p>or prepend to the URL: <code><strong>http://htmlpreview.github.io/?</strong>https://github.com/twbs/bootstrap/blob/gh-pages/2.3.2/index.html</code></p>
-		<p id="footer">Developed by <a href="https://github.com/niutech">niu tech</a> | Contribute on <a href="https://github.com/htmlpreview/htmlpreview.github.com">GitHub</a></p>
-	</form>
-	<script src="/htmlpreview.js"></script>
+  <div class="page-shell">
+    <header class="hero">
+      <div class="topbar">
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21.5v-16Z"/><path d="M4 5.5v16M8 7h8M8 11h8"/></svg>
+          </span>
+          <span>منصة مارو التعليمية</span>
+        </div>
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="تبديل الوضع الليلي">
+          <span class="theme-icon" aria-hidden="true"></span><span class="theme-label">الوضع الليلي</span>
+        </button>
+      </div>
+      <div class="hero-content">
+        <div class="eyebrow"><span class="eyebrow-dot"></span> اختبار إلكتروني تفاعلي</div>
+        <h1>الدرس الأول: <strong>أساسيات HTML</strong></h1>
+        <p class="hero-description">اختبر فهمك لبنية صفحات الويب وعناصر HTML الأساسية والمتقدمة. أجب عن 150 سؤالاً بالتدرج من السهل إلى الصعب.</p>
+        <div class="hero-badges">
+          <span class="hero-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="m8 12 2.5 2.5L16 9"/></svg> 75 اختيار من متعدد</span>
+          <span class="hero-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 12 4 4L19 6"/><path d="M5 6h.01M5 18h.01"/></svg> 75 صح أم خطأ</span>
+          <span class="hero-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> وقت مفتوح</span>
+        </div>
+      </div>
+      <div class="student-panel">
+        <div>
+          <label class="field-label" for="studentName">اسم الطالب</label>
+          <input class="student-input" id="studentName" type="text" placeholder="اكتب اسمك هنا لحفظه في نموذج الطباعة" autocomplete="name">
+        </div>
+        <div>
+          <label class="field-label" for="examDate">التاريخ</label>
+          <input class="student-date" id="examDate" type="date">
+        </div>
+      </div>
+    </header>
+
+    <section class="progress-card" aria-label="تقدم الاختبار">
+      <div class="progress-head">
+        <div class="progress-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5M4 19h16"/><path d="m7 15 3-4 3 2 5-7"/></svg> مستوى الإنجاز</div>
+        <div class="progress-stat" id="progressStat">0 من 150 سؤالاً (0%)</div>
+      </div>
+      <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="نسبة إنجاز الاختبار"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-foot"><span>بداية الاختبار</span><span>أكملت كل الأسئلة 🎉</span></div>
+    </section>
+
+    <div class="actions" aria-label="أدوات الاختبار">
+      <button class="btn btn-primary" id="showAnswersBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6Z"/><circle cx="12" cy="12" r="2.5"/></svg><span>عرض الإجابات</span></button>
+      <button class="btn btn-secondary" id="calculateBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h12a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"/><path d="M8 7h8M8 11h2M14 11h2M8 15h2M14 15h2M8 19h8"/></svg> حساب الدرجة</button>
+      <button class="btn btn-outline" id="printBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v7H6z"/><path d="M17 12h.01"/></svg> طباعة / حفظ PDF</button>
+      <button class="btn btn-danger" id="resetBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v6h6"/></svg> بدء من جديد</button>
+    </div>
+    <p class="save-note">يتم حفظ إجاباتك واسمك تلقائياً على هذا الجهاز فقط.</p>
+
+    <section class="score-panel" id="scorePanel" aria-live="polite">
+      <div class="score-grid">
+        <div class="score-number" id="scoreNumber">0%</div>
+        <div>
+          <h2 id="scoreTitle">نتيجتك جاهزة</h2>
+          <p id="scoreMessage"></p>
+          <div class="score-details" id="scoreDetails"></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="print-header" id="printHeader">
+      <h2>اختبار الدرس الأول: أساسيات HTML</h2>
+      <div class="print-fields"><span>اسم الطالب: <b id="printName">................................</b></span><span>التاريخ: <b id="printDate">................................</b></span><span>الدرجة: <b id="printScore">لم تُحسب</b></span></div>
+    </div>
+
+    <main id="quizContainer" aria-label="أسئلة الاختبار"></main>
+
+    <details class="answer-key" id="answerKey">
+      <summary>مفتاح الإجابات الكامل (150 سؤالاً)</summary>
+      <p class="key-intro">يمكن فتح هذا القسم بعد الانتهاء لمراجعة الإجابات الصحيحة. الإجابة المظللة هي الاختيار الصحيح.</p>
+      <div class="key-grid" id="keyGrid"></div>
+    </details>
+
+    <footer class="site-footer">
+      <p class="footer-name">مارو</p>
+      <p class="footer-sub">تم الإنشاء بواسطة مارو</p>
+      <div class="footer-contact">
+        <a class="footer-link" href="tel:01024789036"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.9a2 2 0 0 1-.5 2.1L8 10a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.3 1.9.6 2.9.7a2 2 0 0 1 1.7 2Z"/></svg> 01024789036</a>
+        <a class="footer-link" href="https://wa.me/201024789036" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 3.5A11.8 11.8 0 0 0 12.1 0C5.6 0 .3 5.3.3 11.8c0 2.1.6 4.1 1.6 5.9L.2 24l6.5-1.7a11.8 11.8 0 0 0 5.4 1.3h.1c6.5 0 11.8-5.3 11.8-11.8 0-3.2-1.3-6.2-3.5-8.3ZM12.1 21.5h-.1a9.8 9.8 0 0 1-5-1.4l-.4-.2-3.8 1 1-3.7-.2-.4a9.8 9.8 0 1 1 8.5 4.7Zm5.4-7.3c-.3-.2-1.7-.8-2-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-1.6-.8-2.6-1.5-3.6-3.3-.3-.5.3-.5.8-1.7.1-.2 0-.4 0-.5 0-.2-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4s1 2.8 1.1 3c.1.2 2 3.1 4.8 4.3 1.8.8 2.5.9 3.4.8.5-.1 1.7-.7 2-1.3.2-.6.2-1.2.1-1.3-.2-.2-.4-.3-.7-.4Z"/></svg> تواصل واتساب</a>
+      </div>
+      <p class="copyright">© 2026 جميع الحقوق محفوظة - مارو</p>
+    </footer>
+  </div>
+
+  <a class="floating-wa" href="https://wa.me/201024789036" target="_blank" rel="noopener noreferrer" aria-label="تواصل مع مارو عبر واتساب" title="تواصل عبر واتساب">
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 3.5A11.8 11.8 0 0 0 12.1 0C5.6 0 .3 5.3.3 11.8c0 2.1.6 4.1 1.6 5.9L.2 24l6.5-1.7a11.8 11.8 0 0 0 5.4 1.3h.1c6.5 0 11.8-5.3 11.8-11.8 0-3.2-1.3-6.2-3.5-8.3ZM12.1 21.5h-.1a9.8 9.8 0 0 1-5-1.4l-.4-.2-3.8 1 1-3.7-.2-.4a9.8 9.8 0 1 1 8.5 4.7Zm5.4-7.3c-.3-.2-1.7-.8-2-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-1.6-.8-2.6-1.5-3.6-3.3-.3-.5.3-.5.8-1.7.1-.2 0-.4 0-.5 0-.2-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4s1 2.8 1.1 3c.1.2 2 3.1 4.8 4.3 1.8.8 2.5.9 3.4.8.5-.1 1.7-.7 2-1.3.2-.6.2-1.2.1-1.3-.2-.2-.4-.3-.7-.4Z"/></svg>
+  </a>
+
+  <script>
+    // بنك الأسئلة: 75 اختياراً من متعدد + 75 صح أو خطأ.
+    const questions = [
+      { type: 'mc', q: 'ماذا تعني HTML؟', options: ['لغة ترميز النص التشعبي', 'لغة تصميم النص المتقدم', 'لغة برمجة صفحات الويب', 'لغة نقل الملفات'], answer: 0 },
+      { type: 'mc', q: 'ما الامتداد الشائع لملف HTML؟', options: ['.css', '.html', '.js', '.php'], answer: 1 },
+      { type: 'mc', q: 'ماذا نسمّي الكلمة المحاطة بعلامتي أكبر من وأصغر من في HTML؟', options: ['خاصية', 'قيمة', 'وسم', 'تعليق'], answer: 2 },
+      { type: 'mc', q: 'ما التصريح الذي يعرّف مستند HTML5 في بداية الملف؟', options: ['&lt;html5&gt;', '&lt;doctype html&gt;', '&lt;!DOCTYPE html&gt;', '&lt;version html="5"&gt;'], answer: 2 },
+      { type: 'mc', q: 'ما العنصر الجذر الذي يضم محتوى صفحة HTML بالكامل؟', options: ['&lt;body&gt;', '&lt;root&gt;', '&lt;page&gt;', '&lt;html&gt;'], answer: 3 },
+      { type: 'mc', q: 'أي عنصر يحتوي عادةً على معلومات الصفحة غير المرئية للمستخدم؟', options: ['&lt;head&gt;', '&lt;main&gt;', '&lt;aside&gt;', '&lt;section&gt;'], answer: 0 },
+      { type: 'mc', q: 'أين يظهر النص الموجود داخل عنصر &lt;title&gt; غالباً؟', options: ['داخل جسم الصفحة', 'في تبويب المتصفح', 'في أسفل الصفحة', 'داخل الصور'], answer: 1 },
+      { type: 'mc', q: 'أي عنصر يحتوي على المحتوى الظاهر داخل صفحة الويب؟', options: ['&lt;head&gt;', '&lt;meta&gt;', '&lt;body&gt;', '&lt;title&gt;'], answer: 2 },
+      { type: 'mc', q: 'ما أكبر مستوى للعناوين في HTML؟', options: ['&lt;h6&gt;', '&lt;heading&gt;', '&lt;h1&gt;', '&lt;head&gt;'], answer: 2 },
+      { type: 'mc', q: 'أي عنصر يُستخدم لكتابة فقرة؟', options: ['&lt;para&gt;', '&lt;p&gt;', '&lt;text&gt;', '&lt;pg&gt;'], answer: 1 },
+      { type: 'mc', q: 'ما العنصر المستخدم لإضافة كسر سطر؟', options: ['&lt;break&gt;', '&lt;lb&gt;', '&lt;br&gt;', '&lt;newline&gt;'], answer: 2 },
+      { type: 'mc', q: 'كيف تكتب تعليقاً لا يظهر للمستخدم في HTML؟', options: ['// تعليق', '/* تعليق */', '&lt;!-- تعليق --&gt;', '# تعليق'], answer: 2 },
+      { type: 'mc', q: 'ماذا تسمى المعلومة الإضافية التي تكتب داخل وسم البداية؟', options: ['خاصية Attribute', 'عنصر Element', 'محتوى Content', 'مسار Path'], answer: 0 },
+      { type: 'mc', q: 'أي خاصية تحدد الرابط الذي ينتقل إليه عنصر &lt;a&gt;؟', options: ['src', 'link', 'href', 'url'], answer: 2 },
+      { type: 'mc', q: 'أي خاصية تحدد مسار الصورة داخل عنصر &lt;img&gt;؟', options: ['href', 'src', 'path', 'image'], answer: 1 },
+      { type: 'mc', q: 'ما الغرض الأساسي من الخاصية alt في الصور؟', options: ['تغيير حجم الصورة', 'كتابة نص بديل للصورة', 'إضافة رابط للصورة', 'ضغط الصورة'], answer: 1 },
+      { type: 'mc', q: 'أي عنصر ينشئ رابطاً قابلاً للنقر؟', options: ['&lt;link&gt;', '&lt;a&gt;', '&lt;href&gt;', '&lt;url&gt;'], answer: 1 },
+      { type: 'mc', q: 'أي عنصر ينشئ قائمة غير مرتبة؟', options: ['&lt;ol&gt;', '&lt;list&gt;', '&lt;ul&gt;', '&lt;li&gt;'], answer: 2 },
+      { type: 'mc', q: 'أي عنصر ينشئ قائمة مرتبة؟', options: ['&lt;ol&gt;', '&lt;ul&gt;', '&lt;order&gt;', '&lt;list&gt;'], answer: 0 },
+      { type: 'mc', q: 'أي عنصر يمثل عنصراً داخل قائمة؟', options: ['&lt;item&gt;', '&lt;li&gt;', '&lt;list-item&gt;', '&lt;point&gt;'], answer: 1 },
+      { type: 'mc', q: 'أي عنصر يمثل صفاً داخل جدول؟', options: ['&lt;td&gt;', '&lt;row&gt;', '&lt;tr&gt;', '&lt;table-row&gt;'], answer: 2 },
+      { type: 'mc', q: 'أي عنصر يمثل خلية عنوان في جدول؟', options: ['&lt;thead-cell&gt;', '&lt;th&gt;', '&lt;header&gt;', '&lt;tc&gt;'], answer: 1 },
+      { type: 'mc', q: 'أي عنصر يمثل خلية بيانات عادية في جدول؟', options: ['&lt;data&gt;', '&lt;cell&gt;', '&lt;td&gt;', '&lt;table-data&gt;'], answer: 2 },
+      { type: 'mc', q: 'ما العنصر الذي يُستخدم لإنشاء نموذج إدخال؟', options: ['&lt;input-form&gt;', '&lt;form&gt;', '&lt;data-form&gt;', '&lt;fields&gt;'], answer: 1 },
+      { type: 'mc', q: 'ما وظيفة الخاصية action في النموذج؟', options: ['تغيير لون النموذج', 'تحديد مكان إرسال البيانات', 'منع إرسال البيانات', 'تحديد عدد الحقول'], answer: 1 },
+      { type: 'mc', q: 'أي قيمة من method ترسل البيانات عادةً ضمن عنوان URL؟', options: ['SEND', 'POST', 'GET', 'URL'], answer: 2 },
+      { type: 'mc', q: 'ما نوع input المناسب لإدخال نص قصير من سطر واحد؟', options: ['text', 'paragraph', 'line', 'string'], answer: 0 },
+      { type: 'mc', q: 'ما فائدة الخاصية for في عنصر label؟', options: ['ربطه بعنصر input له نفس id', 'تحديد لون النص', 'تحديد عدد الخيارات', 'تحويله إلى زر'], answer: 0 },
+      { type: 'mc', q: 'ما فائدة الخاصية placeholder؟', options: ['تحديد قيمة لا يمكن تغييرها', 'عرض تلميح مؤقت داخل حقل الإدخال', 'إخفاء الحقل', 'إرسال النموذج تلقائياً'], answer: 1 },
+      { type: 'mc', q: 'ماذا تفعل الخاصية required في حقل الإدخال؟', options: ['تجعل الحقل إلزامياً قبل الإرسال', 'تمنع كتابة الأرقام', 'تضيف كلمة مرور', 'تخفي الحقل'], answer: 0 },
+      { type: 'mc', q: 'أي عنصر يُستخدم غالباً لإنشاء زر؟', options: ['&lt;click&gt;', '&lt;button&gt;', '&lt;press&gt;', '&lt;action&gt;'], answer: 1 },
+      { type: 'mc', q: 'أي عنصر دلالي يعبّر عن رأس الصفحة أو القسم؟', options: ['&lt;top&gt;', '&lt;header&gt;', '&lt;head&gt;', '&lt;heading-area&gt;'], answer: 1 },
+      { type: 'mc', q: 'أي عنصر دلالي يُستخدم لمجموعة روابط التنقل؟', options: ['&lt;navigation&gt;', '&lt;nav&gt;', '&lt;menu-links&gt;', '&lt;links&gt;'], answer: 1 },
+      { type: 'mc', q: 'أي عنصر يحدد المحتوى الرئيسي الفريد للصفحة؟', options: ['&lt;content&gt;', '&lt;primary&gt;', '&lt;main&gt;', '&lt;center&gt;'], answer: 2 },
+      { type: 'mc', q: 'ما العنصر المناسب لتجميع محتوى مرتبط في قسم مستقل؟', options: ['&lt;section&gt;', '&lt;group&gt;', '&lt;part&gt;', '&lt;content-box&gt;'], answer: 0 },
+      { type: 'mc', q: 'أي عنصر يمثل محتوى مستقلاً مثل مقال أو خبر؟', options: ['&lt;post&gt;', '&lt;article&gt;', '&lt;story&gt;', '&lt;entry&gt;'], answer: 1 },
+      { type: 'mc', q: 'أي عنصر دلالي يعبّر عن تذييل الصفحة أو القسم؟', options: ['&lt;bottom&gt;', '&lt;footer&gt;', '&lt;end&gt;', '&lt;foot&gt;'], answer: 1 },
+      { type: 'mc', q: 'ما الاستخدام الشائع لعنصر &lt;div&gt;؟', options: ['تجميع عناصر دون معنى دلالي محدد', 'إضافة فيديو فقط', 'إنشاء عنوان رئيسي', 'إرسال نموذج'], answer: 0 },
+      { type: 'mc', q: 'ما الاستخدام الشائع لعنصر &lt;span&gt;؟', options: ['تجميع نص أو محتوى صغير داخل السطر', 'إنشاء جدول', 'إضافة صورة', 'إنشاء صفحة جديدة'], answer: 0 },
+      { type: 'mc', q: 'أي خاصية تحدد لغة المستند للمتصفحات وقارئات الشاشة؟', options: ['language', 'lang', 'locale', 'dir-language'], answer: 1 },
+      { type: 'mc', q: 'ما قيمة charset المناسبة لدعم العربية ومعظم اللغات الحديثة؟', options: ['ASCII', 'UTF-8', 'LATIN-1', 'ARABIC-7'], answer: 1 },
+      { type: 'mc', q: 'ما الغرض الأساسي من وسم viewport في صفحة متجاوبة؟', options: ['تغيير عنوان الصفحة', 'ضبط طريقة عرض الصفحة على شاشات الأجهزة', 'تحميل الصور', 'إخفاء شريط التمرير'], answer: 1 },
+      { type: 'mc', q: 'كيف تربط ملف CSS خارجي بصفحة HTML؟', options: ['&lt;css src="style.css"&gt;', '&lt;link rel="stylesheet" href="style.css"&gt;', '&lt;style href="style.css"&gt;', '&lt;import css="style.css"&gt;'], answer: 1 },
+      { type: 'mc', q: 'ما المقصود بتداخل العناصر (Nesting)؟', options: ['كتابة عنصر داخل عنصر آخر', 'تكرار الملف', 'حذف الوسوم', 'تغيير لغة الصفحة'], answer: 0 },
+      { type: 'mc', q: 'ما الشكل الصحيح لإغلاق معظم عناصر HTML؟', options: ['&lt;/اسم-العنصر&gt;', '&lt;close اسم-العنصر&gt;', '&lt;end اسم-العنصر&gt;', '&lt;اسم-العنصر/&gt; فقط دائماً'], answer: 0 },
+      { type: 'mc', q: 'أي عنصر مما يلي عنصر فارغ (Void Element) لا يحتاج وسم إغلاق؟', options: ['&lt;p&gt;', '&lt;div&gt;', '&lt;img&gt;', '&lt;article&gt;'], answer: 2 },
+      { type: 'mc', q: 'ما أفضل ممارسة لقيمة id؟', options: ['استخدام القيمة نفسها لعناصر كثيرة', 'أن تكون فريدة داخل المستند', 'أن تحتوي مسافات دائماً', 'أن تكون رقمية فقط'], answer: 1 },
+      { type: 'mc', q: 'ما الميزة الأساسية لـ class مقارنةً بـ id؟', options: ['يمكن استخدامها مع عدة عناصر', 'لا يمكن تنسيقها بـ CSS', 'تُستخدم للصور فقط', 'تغلق العنصر تلقائياً'], answer: 0 },
+      { type: 'mc', q: 'ما فائدة aria-label عند استخدامه بشكل صحيح؟', options: ['تغيير حجم العنصر', 'إعطاء وصف لقارئات الشاشة', 'إضافة حركة', 'منع النقر'], answer: 1 },
+      { type: 'mc', q: 'ما قيمة target التي تفتح الرابط في تبويب أو نافذة جديدة غالباً؟', options: ['_same', '_new', '_blank', '_tab'], answer: 2 },
+      { type: 'mc', q: 'ما فائدة الخاصية download في عنصر الرابط؟', options: ['طلب تنزيل المورد المرتبط', 'تسريع الإنترنت', 'منع فتح الرابط', 'تشفير الملف'], answer: 0 },
+      { type: 'mc', q: 'ما فائدة الخاصية title على عنصر HTML؟', options: ['إنشاء عنوان الصفحة في التبويب', 'عرض تلميح عند المرور غالباً', 'إخفاء العنصر', 'تغيير نوع الخط'], answer: 1 },
+      { type: 'mc', q: 'أي عنصر يجمع صورة مع وصف أو تسمية لها؟', options: ['&lt;picture-caption&gt;', '&lt;figure&gt;', '&lt;image-group&gt;', '&lt;illustration&gt;'], answer: 1 },
+      { type: 'mc', q: 'أي عنصر يضيف تسمية دلالية لمحتوى &lt;figure&gt;؟', options: ['&lt;caption&gt;', '&lt;figcaption&gt;', '&lt;label&gt;', '&lt;description&gt;'], answer: 1 },
+      { type: 'mc', q: 'ما الخاصية التي تظهر أدوات التحكم في عنصر audio أو video؟', options: ['buttons', 'controls', 'player', 'interface'], answer: 1 },
+      { type: 'mc', q: 'ما العنصر الذي يضم صفحة أو مستنداً آخر داخل الصفحة؟', options: ['&lt;embed-page&gt;', '&lt;iframe&gt;', '&lt;frame-page&gt;', '&lt;window&gt;'], answer: 1 },
+      { type: 'mc', q: 'ما قيمة rel الشائعة لربط أيقونة الموقع (favicon)؟', options: ['favicon', 'icon', 'site-icon', 'shortcut-image'], answer: 1 },
+      { type: 'mc', q: 'أين تُكتب غالباً meta description؟', options: ['داخل &lt;head&gt;', 'داخل &lt;footer&gt;', 'داخل &lt;table&gt;', 'داخل &lt;title&gt;'], answer: 0 },
+      { type: 'mc', q: 'ما فائدة الخاصية defer في وسم script؟', options: ['تشغيل السكربت بعد تحليل HTML مع الحفاظ على ترتيب السكربتات المؤجلة', 'منع تحميل السكربت', 'تشغيله قبل تحميل الصفحة دائماً', 'تحويله إلى CSS'], answer: 0 },
+      { type: 'mc', q: 'كيف تنشئ خاصية مخصصة صالحة في HTML5؟', options: ['باستخدام custom-', 'باستخدام data- مثل data-id', 'باستخدام own-', 'بكتابة الخاصية خارج العنصر'], answer: 1 },
+      { type: 'mc', q: 'ما فائدة contenteditable="true"؟', options: ['يجعل محتوى العنصر قابلاً للتحرير من المستخدم', 'يمنع تحديد النص', 'يخفي العنصر', 'يجعل العنصر رابطاً'], answer: 0 },
+      { type: 'mc', q: 'ما القيمة المناسبة لـ dir لعرض اتجاه النص من اليمين إلى اليسار؟', options: ['right', 'rtl', 'arabic', 'reverse'], answer: 1 },
+      { type: 'mc', q: 'أي نوع input يعطي المتصفح إمكانية التحقق من صيغة البريد الإلكتروني؟', options: ['mail', 'email', 'text-email', 'address'], answer: 1 },
+      { type: 'mc', q: 'أي نوع input يعرض أداة مناسبة لاختيار تاريخ؟', options: ['calendar', 'date', 'day', 'datetime-only'], answer: 1 },
+      { type: 'mc', q: 'كيف تجعل عدة أزرار radio تنتمي إلى مجموعة واحدة؟', options: ['تمنحها نفس name', 'تمنحها نفس id دائماً', 'تضعها في ملفات مختلفة', 'تستخدم نفس value فقط'], answer: 0 },
+      { type: 'mc', q: 'ما الاستخدام المعتاد لـ checkbox؟', options: ['اختيار خيار واحد فقط من مجموعة', 'السماح باختيار أكثر من خيار مستقل', 'إدخال فقرة طويلة', 'اختيار تاريخ'], answer: 1 },
+      { type: 'mc', q: 'أي عنصر ينشئ قائمة منسدلة؟', options: ['&lt;dropdown&gt;', '&lt;select&gt;', '&lt;listbox&gt;', '&lt;choice&gt;'], answer: 1 },
+      { type: 'mc', q: 'أي عنصر يحدد اختياراً داخل &lt;select&gt;؟', options: ['&lt;item&gt;', '&lt;option&gt;', '&lt;choice&gt;', '&lt;select-item&gt;'], answer: 1 },
+      { type: 'mc', q: 'أي عنصر مناسب لإدخال نص متعدد الأسطر؟', options: ['&lt;input type="longtext"&gt;', '&lt;textarea&gt;', '&lt;multiline&gt;', '&lt;textbox&gt;'], answer: 1 },
+      { type: 'mc', q: 'ما فائدة &lt;fieldset&gt; في النموذج؟', options: ['تجميع حقول مرتبطة', 'تشفير النموذج', 'إرسال البيانات', 'تغيير اتجاه الصفحة'], answer: 0 },
+      { type: 'mc', q: 'ما العنصر الذي يصف مجموعة الحقول داخل fieldset؟', options: ['&lt;field-title&gt;', '&lt;legend&gt;', '&lt;caption&gt;', '&lt;fieldset-label&gt;'], answer: 1 },
+      { type: 'mc', q: 'أي خاصية تساعد المتصفح على اقتراح بيانات محفوظة للمستخدم؟', options: ['suggest', 'autocomplete', 'remember', 'autofill-data'], answer: 1 },
+      { type: 'mc', q: 'ما نتيجة استخدام novalidate على عنصر form؟', options: ['إلغاء تحقق المتصفح المدمج عند الإرسال', 'منع إدخال البيانات', 'إجبار التحقق من الخادم', 'تحويل النموذج إلى GET'], answer: 0 },
+      { type: 'mc', q: 'ما النوع الافتراضي لعنصر button داخل form في HTML؟', options: ['button', 'submit', 'reset', 'menu'], answer: 1 },
+      { type: 'mc', q: 'ما الكائن الذي يمثل مستند HTML في JavaScript ويتيح الوصول إلى عناصره؟', options: ['window.document', 'html.page', 'dom.html', 'browser.file'], answer: 0 }
+    ];
+
+    const trueFalse = [
+      ['HTML لغة ترميز تُستخدم لوصف بنية محتوى صفحات الويب.', true],
+      ['تُستخدم CSS عادةً لتحديد بنية عناصر HTML بدلاً من تنسيقها.', false],
+      ['التصريح &lt;!DOCTYPE html&gt; هو وسم محتوى يظهر داخل الصفحة.', false],
+      ['يحتوي عنصر html عادةً على عنصري head وbody.', true],
+      ['يظهر محتوى عنصر title كنص عادي داخل جسم الصفحة.', false],
+      ['يُعد h1 أكبر مستوى عناوين دلالياً في HTML.', true],
+      ['ينشئ عنصر p فقرة جديدة.', true],
+      ['يحتاج عنصر br إلى وسم إغلاق مستقل مثل &lt;/br&gt; في HTML5.', false],
+      ['تظهر التعليقات المكتوبة بصيغة HTML للمستخدم داخل الصفحة.', false],
+      ['الخاصية href هي التي تحدد مصدر الصورة في عنصر img.', false],
+      ['تساعد الخاصية alt مستخدمي قارئات الشاشة عند وجود صورة.', true],
+      ['يحتاج عنصر img إلى وسم إغلاق في HTML5.', false],
+      ['تعرض ul عناصر القائمة عادةً بترقيم متسلسل تلقائياً.', false],
+      ['تُستخدم ol لإنشاء قائمة مرتبة.', true],
+      ['يمثل li عنصراً من عناصر القائمة.', true],
+      ['يمثل th خلية عنوان في جدول.', true],
+      ['يمثل tr خلية واحدة داخل الجدول.', false],
+      ['يمثل td خلية بيانات عادية في الجدول.', true],
+      ['يمكن لعنصر form أن يجمع بيانات يدخلها المستخدم.', true],
+      ['تحدد action في form الوجهة التي تُرسل إليها البيانات.', true],
+      ['ترسل طريقة GET البيانات عادةً ضمن عنوان URL.', true],
+      ['تضمن طريقة POST وحدها تشفير البيانات أثناء النقل.', false],
+      ['تُعد placeholder بديلاً كاملاً عن label من ناحية سهولة الوصول.', false],
+      ['تطلب required وجود قيمة قبل إرسال النموذج من خلال تحقق المتصفح.', true],
+      ['يتم إرسال قيمة الحقل disabled عادةً عند إرسال النموذج.', false],
+      ['يسمح readonly بعرض القيمة مع منع تعديلها غالباً.', true],
+      ['يُفضّل أن تتطابق قيمة label for مع id الحقل المرتبط.', true],
+      ['يمكن تكرار id نفسه بشكل صحيح لعدد غير محدود من العناصر.', false],
+      ['يمكن استخدام class نفسها مع عدة عناصر.', true],
+      ['تستخدم العناصر الدلالية أسماءً توضّح معنى المحتوى وبنيته.', true],
+      ['يُعد div عنصراً دلالياً يحدد نوع محتواه بدقة.', false],
+      ['يُستخدم nav عادةً لاحتواء روابط التنقل الرئيسية.', true],
+      ['يمثل article محتوى يمكن أن يكون مستقلاً نسبياً عن بقية الصفحة.', true],
+      ['يُستخدم span غالباً لتجميع جزء صغير من المحتوى داخل السطر.', true],
+      ['تستطيع UTF-8 تمثيل الحروف العربية.', true],
+      ['وسم viewport يساعد على ضبط العرض في الأجهزة المحمولة.', true],
+      ['يُستخدم link rel="stylesheet" لربط ملف CSS خارجي.', true],
+      ['التداخل الصحيح يعني وضع كل عنصر داخل عنصر آخر عشوائياً دون مراعاة الإغلاق.', false],
+      ['يجب أن تكون وسوم الإغلاق متداخلة بالترتيب الصحيح.', true],
+      ['كل عناصر HTML تحتاج إلى وسم بداية ووسم نهاية.', false],
+      ['من الأفضل أن تكون قيمة id فريدة داخل المستند.', true],
+      ['يمكن استخدام class لتجميع عناصر تشترك في التنسيق أو السلوك.', true],
+      ['تُستخدم aria-label لتغيير حجم الخط.', false],
+      ['target="_blank" يطلب فتح المورد في سياق تصفح جديد غالباً.', true],
+      ['تضمن الخاصية download أن كل متصفح سيحفظ أي مورد دون قيود.', false],
+      ['قد يعرض المتصفح قيمة title كتلميح عند المرور بالمؤشر.', true],
+      ['يجمع figure عادةً محتوى توضيحياً مع تسمية figcaption.', true],
+      ['تظهر أدوات تشغيل الصوت والفيديو عند إضافة controls.', true],
+      ['يُستخدم iframe لتضمين مستند أو صفحة أخرى داخل الصفحة.', true],
+      ['يجب وضع favicon داخل عنصر img في body فقط.', false],
+      ['تُكتب meta description عادةً داخل head.', true],
+      ['يمكن استخدام script مع defer داخل head مع تأجيل التنفيذ لما بعد تحليل HTML.', true],
+      ['تحافظ async دائماً على ترتيب تنفيذ جميع السكربتات مهما كان وقت تحميلها.', false],
+      ['تبدأ أسماء الخصائص المخصصة الصحيحة في HTML5 بالبادئة data-.', true],
+      ['تجعل contenteditable="true" محتوى العنصر قابلاً للتحرير من المستخدم.', true],
+      ['القيمة rtl في dir تعني اتجاه النص من اليمين إلى اليسار.', true],
+      ['يوفر input type="email" تحققاً مبدئياً من صيغة البريد في المتصفح.', true],
+      ['يغني تحقق المتصفح عن التحقق من البيانات على الخادم.', false],
+      ['يُستخدم نفس name عادةً لتجميع أزرار radio في اختيار واحد.', true],
+      ['يمكن للمستخدم تحديد عدة checkbox في المجموعة نفسها.', true],
+      ['يحتوي select عادةً على عناصر option.', true],
+      ['يُغلق textarea دائماً بشرطة مائلة ذاتية مثل input.', false],
+      ['يجمع fieldset حقول النموذج ذات الصلة.', true],
+      ['يقدم legend وصفاً لمجموعة fieldset.', true],
+      ['يسمح HTML القياسي بتداخل form داخل form آخر بشكل صحيح.', false],
+      ['الزر button داخل form يكون submit افتراضياً في الحالة المعتادة.', true],
+      ['يؤدي button type="button" إلى إرسال النموذج تلقائياً.', false],
+      ['يمكن تجاوز تحقق العميل، لذلك لا يجب الاعتماد عليه وحده للحماية.', true],
+      ['استخدام alt فارغ لصورة زخرفية يمكن أن يمنع قارئ الشاشة من إعلانها.', true],
+      ['يمكن استخدام sandbox في iframe لفرض قيود أمنية على المحتوى المضمّن.', true],
+      ['تكون accesskey مناسبة دائماً ولا يمكن أن تسبب تعارضاً مع اختصارات النظام.', false],
+      ['ينبغي اختيار مستويات العناوين وفق التسلسل الدلالي لا وفق الحجم البصري وحده.', true],
+      ['يمنع معيار HTML وجود أكثر من h1 في كل صفحة مهما كان تركيبها.', false],
+      ['قد يحسن استخدام HTML الدلالي قابلية الوصول وفهم محركات البحث للبنية.', true],
+      ['يساعد الالتزام بالتداخل الصحيح على تجنب سلوكيات عرض غير متوقعة.', true]
+    ].map(([q, answer]) => ({ type: 'tf', q, options: ['صح', 'خطأ'], answer: answer ? 0 : 1 }));
+
+    questions.push(...trueFalse);
+
+    const totalQuestions = questions.length;
+    const storageKey = 'maro-html-lesson-one-v2';
+    const themeKey = 'maro-html-lesson-theme-v1';
+    let state = { answers: {}, name: '', date: '', score: null };
+    let answersVisible = false;
+
+    const $ = (selector) => document.querySelector(selector);
+    const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[char]));
+    const difficulty = (index) => index < 25 ? 'سهل' : index < 80 ? 'متوسط' : 'متقدم';
+    const letter = (index, type) => type === 'tf' ? (index === 0 ? 'ص' : 'خ') : ['أ', 'ب', 'ج', 'د'][index];
+
+    function loadState() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(storageKey) || '{}');
+        state = { ...state, ...saved, answers: saved.answers || {} };
+      } catch (error) { /* تجاهل بيانات التخزين التالفة */ }
+      const savedTheme = localStorage.getItem(themeKey);
+      setTheme(savedTheme === 'dark');
+      $('#studentName').value = state.name || '';
+      $('#examDate').value = state.date || new Date().toISOString().slice(0, 10);
+    }
+
+    function saveState() {
+      state.name = $('#studentName').value.trim();
+      state.date = $('#examDate').value;
+      localStorage.setItem(storageKey, JSON.stringify(state));
+    }
+
+    function setTheme(isDark) {
+      document.documentElement.dataset.theme = isDark ? 'dark' : 'light';
+      localStorage.setItem(themeKey, isDark ? 'dark' : 'light');
+      $('.theme-icon').innerHTML = isDark
+        ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"/></svg>'
+        : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3 6.6 6.6 0 0 0 21 12.8Z"/></svg>';
+      $('.theme-label').textContent = isDark ? 'الوضع النهاري' : 'الوضع الليلي';
+      $('#themeToggle').setAttribute('aria-label', isDark ? 'تفعيل الوضع النهاري' : 'تفعيل الوضع الليلي');
+    }
+
+    function renderQuestion(question, index) {
+      const isTF = question.type === 'tf';
+      const options = question.options.map((option, optionIndex) => `
+        <label class="option" data-option="${optionIndex}">
+          <input type="radio" name="q${index}" value="${optionIndex}" ${state.answers[index] === optionIndex ? 'checked' : ''}>
+          <span class="option-marker">${letter(optionIndex, question.type)}</span>
+          <span class="option-label">${option}</span>
+        </label>
+      `).join('');
+      return `
+        <article class="question-card ${state.answers[index] !== undefined ? 'answered' : ''}" data-index="${index}" style="animation-delay:${Math.min(index * 0.012, .5)}s">
+          <div class="question-top">
+            <div class="question-number">${index + 1}</div>
+            <div class="question-copy">
+              <div class="question-meta"><span class="question-type">${isTF ? 'صح أم خطأ' : 'اختيار من متعدد'}</span><span class="question-difficulty">مستوى ${difficulty(index)}</span></div>
+              <p class="question-text">${question.q}</p>
+            </div>
+          </div>
+          <div class="options">${options}</div>
+          <div class="answer-feedback" aria-live="polite"></div>
+        </article>
+      `;
+    }
+
+    function renderQuiz() {
+      const mc = questions.slice(0, 75);
+      const tf = questions.slice(75);
+      $('#quizContainer').innerHTML = `
+        <div class="section-heading"><div><h2>القسم الأول: اختيار من متعدد</h2><p>اختر إجابة واحدة صحيحة لكل سؤال — 75 سؤالاً</p></div></div>
+        <div class="quiz-list">${mc.map((question, i) => renderQuestion(question, i)).join('')}</div>
+        <div class="section-heading"><div><h2>القسم الثاني: صح أم خطأ</h2><p>حدد ما إذا كانت العبارة صحيحة أم خاطئة — 75 سؤالاً</p></div></div>
+        <div class="quiz-list">${tf.map((question, i) => renderQuestion(question, i + 75)).join('')}</div>
+      `;
+      renderKey();
+      updateProgress();
+      if (answersVisible) applyAnswerVisibility();
+    }
+
+    function renderKey() {
+      $('#keyGrid').innerHTML = questions.map((question, index) => `<div class="key-item"><strong>${index + 1}. ${letter(question.answer, question.type)}</strong> ${question.options[question.answer]}</div>`).join('');
+    }
+
+    function updateProgress() {
+      const answered = Object.keys(state.answers).filter((key) => state.answers[key] !== undefined).length;
+      const percentage = Math.round((answered / totalQuestions) * 100);
+      $('#progressFill').style.width = `${percentage}%`;
+      $('#progressStat').textContent = `${answered} من ${totalQuestions} سؤالاً (${percentage}%)`;
+      const bar = $('.progress-track');
+      bar.setAttribute('aria-valuenow', percentage);
+      document.querySelectorAll('.question-card').forEach((card) => card.classList.toggle('answered', state.answers[card.dataset.index] !== undefined));
+    }
+
+    function applyAnswerVisibility() {
+      document.querySelectorAll('.question-card').forEach((card) => {
+        const index = Number(card.dataset.index);
+        const question = questions[index];
+        const selected = state.answers[index];
+        const feedback = card.querySelector('.answer-feedback');
+        card.classList.toggle('answers-visible', answersVisible);
+        card.querySelectorAll('.option').forEach((option, optionIndex) => {
+          option.classList.toggle('correct-answer', answersVisible && optionIndex === question.answer);
+          option.classList.toggle('wrong-answer', answersVisible && selected !== undefined && selected !== question.answer && optionIndex === selected);
+        });
+        if (answersVisible) {
+          if (selected === undefined) {
+            feedback.className = 'answer-feedback neutral';
+            feedback.textContent = `لم تتم الإجابة. الصحيحة: ${letter(question.answer, question.type)} — ${question.options[question.answer].replace(/<[^>]+>/g, '')}`;
+          } else if (selected === question.answer) {
+            feedback.className = 'answer-feedback good';
+            feedback.textContent = 'إجابة صحيحة ✓';
+          } else {
+            feedback.className = 'answer-feedback bad';
+            feedback.textContent = `إجابة غير صحيحة. الصحيحة: ${letter(question.answer, question.type)} — ${question.options[question.answer].replace(/<[^>]+>/g, '')}`;
+          }
+        } else {
+          feedback.className = 'answer-feedback';
+          feedback.textContent = '';
+        }
+      });
+      $('#showAnswersBtn').querySelector('span').textContent = answersVisible ? 'إخفاء الإجابات' : 'عرض الإجابات';
+    }
+
+    function calculateScore() {
+      let correct = 0;
+      let answered = 0;
+      questions.forEach((question, index) => {
+        if (state.answers[index] !== undefined) {
+          answered++;
+          if (state.answers[index] === question.answer) correct++;
+        }
+      });
+      const percentage = Math.round((correct / totalQuestions) * 100);
+      state.score = { correct, answered, percentage };
+      saveState();
+      $('#scoreNumber').textContent = `${percentage}%`;
+      $('#scoreTitle').textContent = percentage >= 90 ? 'ممتاز جداً! أداء رائع 🌟' : percentage >= 75 ? 'أحسنت! نتيجة قوية 👏' : percentage >= 50 ? 'بداية جيدة، واصل التدريب 💪' : 'لا تستسلم، المراجعة طريق التقدم 🌱';
+      $('#scoreMessage').textContent = `حصلت على ${correct} إجابة صحيحة من أصل ${totalQuestions}. ${answered < totalQuestions ? `تبقى لديك ${totalQuestions - answered} سؤالاً بلا إجابة.` : 'أجبت عن جميع الأسئلة.'}`;
+      $('#scoreDetails').innerHTML = `<span class="score-chip">الإجابات الصحيحة: ${correct}</span><span class="score-chip">غير الصحيحة: ${answered - correct}</span><span class="score-chip">بدون إجابة: ${totalQuestions - answered}</span>`;
+      $('#scorePanel').classList.add('visible');
+      renderPrintMeta();
+      $('#scorePanel').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function renderPrintMeta() {
+      const name = $('#studentName').value.trim() || '................................';
+      const dateValue = $('#examDate').value;
+      const date = dateValue ? new Date(`${dateValue}T00:00:00`).toLocaleDateString('ar-EG') : '................................';
+      $('#printName').textContent = name;
+      $('#printDate').textContent = date;
+      $('#printScore').textContent = state.score ? `${state.score.correct} / ${totalQuestions} (${state.score.percentage}%)` : 'لم تُحسب';
+    }
+
+    function resetQuiz() {
+      if (!confirm('هل تريد حذف كل الإجابات والبدء من جديد؟')) return;
+      state = { answers: {}, name: '', date: new Date().toISOString().slice(0, 10), score: null };
+      answersVisible = false;
+      localStorage.removeItem(storageKey);
+      $('#studentName').value = '';
+      $('#examDate').value = state.date;
+      $('#scorePanel').classList.remove('visible');
+      renderQuiz();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    document.addEventListener('change', (event) => {
+      const input = event.target;
+      if (!input.matches('.option input')) return;
+      const card = input.closest('.question-card');
+      const index = Number(card.dataset.index);
+      state.answers[index] = Number(input.value);
+      saveState();
+      card.classList.add('answered', 'answer-pulse');
+      setTimeout(() => card.classList.remove('answer-pulse'), 500);
+      updateProgress();
+      if (answersVisible) applyAnswerVisibility();
+    });
+
+    $('#studentName').addEventListener('input', saveState);
+    $('#examDate').addEventListener('change', saveState);
+    $('#themeToggle').addEventListener('click', () => setTheme(document.documentElement.dataset.theme !== 'dark'));
+    $('#showAnswersBtn').addEventListener('click', () => { answersVisible = !answersVisible; applyAnswerVisibility(); });
+    $('#calculateBtn').addEventListener('click', calculateScore);
+    $('#resetBtn').addEventListener('click', resetQuiz);
+    $('#printBtn').addEventListener('click', () => { renderPrintMeta(); window.print(); });
+    window.addEventListener('beforeprint', renderPrintMeta);
+
+    if (questions.length !== 150 || questions.slice(0, 75).filter((question) => question.type === 'mc').length !== 75 || questions.slice(75).filter((question) => question.type === 'tf').length !== 75) {
+      console.error('Question bank validation failed. Expected 75 MC + 75 True/False questions.');
+    }
+    loadState();
+    renderQuiz();
+  </script>
 </body>
 </html>
